@@ -1,7 +1,7 @@
+import useAuth from "hooks/useAuth";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import signup, { ISignUpRequest } from "../../services/auth/default/signup";
-import useAuth from "../useAuth";
+import signup, { ISignUpRequest } from "services/auth/default/signup";
 
 const useSignup = () => {
   const { updateToken, updateEmail } = useAuth();

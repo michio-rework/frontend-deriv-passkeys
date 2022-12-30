@@ -1,7 +1,7 @@
+import useAuth from "hooks/useAuth";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import login, { ILoginRequest } from "../../services/auth/default/login";
-import useAuth from "../useAuth";
+import login, { ILoginRequest } from "services/auth/default/login";
 
 const useLogin = () => {
   const { updateToken, updateEmail } = useAuth();

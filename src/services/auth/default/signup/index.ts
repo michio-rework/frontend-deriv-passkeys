@@ -1,5 +1,5 @@
-import axios from "axios";
-import { IToken } from "../../../../types";
+import Api from "services/api";
+import { IToken } from "types";
 
 export interface ISignUpRequest {
   email: string;
@@ -12,7 +12,7 @@ export interface ISignUpResponse {
 }
 
 const signup = ({ email, password }: ISignUpRequest) => {
-  return axios.post<ISignUpResponse>("http://localhost:3000/auth/register", {
+  return Api.post<ISignUpResponse>("auth/register", {
     email,
     password,
   });

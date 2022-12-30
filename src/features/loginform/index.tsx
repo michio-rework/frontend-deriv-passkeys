@@ -1,17 +1,17 @@
 import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { ILoginRequest } from "services/auth/default/login";
 import styled from "styled-components";
-import FormButton from "../../components/Form/Button";
-import ButtonContainer from "../../components/Form/ButtonContainer";
-import FormHeader from "../../components/Form/Header";
-import FormInput from "../../components/Form/Input";
-import InputContainer from "../../components/Form/InputContainer";
-import FormLabel from "../../components/Form/Label";
-import useLogin from "../../hooks/useLogin";
-import usePasskeyLogin from "../../hooks/usePasskeyLogin";
-import useWebAuthn from "../../hooks/useWebAuthn";
-import { ILoginRequest } from "../../services/auth/default/login";
+import FormButton from "components/Form/Button";
+import ButtonContainer from "components/Form/ButtonContainer";
+import FormHeader from "components/Form/Header";
+import FormInput from "components/Form/Input";
+import InputContainer from "components/Form/InputContainer";
+import FormLabel from "components/Form/Label";
+import useLogin from "hooks/useLogin";
+import usePasskeyLogin from "hooks/usePasskeyLogin";
+import useWebAuthn from "hooks/useWebAuthn";
 
 const LoginFormContainer = styled.div`
   max-width: 500px;

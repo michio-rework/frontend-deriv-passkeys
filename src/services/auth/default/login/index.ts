@@ -1,5 +1,5 @@
-import axios from "axios";
-import { IToken } from "../../../../types";
+import Api from "services/api";
+import { IToken } from "types";
 
 export interface ILoginRequest {
   email: string;
@@ -12,7 +12,7 @@ export interface ILoginResponse {
 }
 
 const login = ({ email, password }: ILoginRequest) => {
-  return axios.post<ILoginResponse>("http://localhost:3000/auth/login", {
+  return Api.post<ILoginResponse>("auth/login", {
     email,
     password,
   });

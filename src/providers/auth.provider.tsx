@@ -1,31 +1,37 @@
 import { ReactNode, useCallback, useMemo, useState } from "react";
-import AuthContext, { IAuthContext } from "../contexts/auth.context";
+import { useLocalStorage } from "usehooks-ts";
+import AuthContext, { IAuthContext } from "contexts/auth.context";
 
 interface IAuthProvider {
   children: ReactNode;
 }
 
 const AuthProvider = ({ children }: IAuthProvider) => {
-  const [email, setEmail] = useState<string>("");
-  const [token, setToken] = useState<string>("");
+  const [tokenStorage, setTokenStorage] = useLocalStorage<string>("token", "");
+  const [emailStorage, setEmailStorage] = useLocalStorage<string>("email", "");
 
   const updateEmail = useCallback((updatedEmail: string) => {
-    // todo: add email validation
-    setEmail(updatedEmail);
+    setEmailStorage(updatedEmail);
   }, []);
 
   const updateToken = useCallback((updatedToken: string) => {
-    setToken(updatedToken);
+    setTokenStorage(updatedToken);
+  }, []);
+
+  const logout = useCallback(() => {
+    setEmailStorage("");
+    setTokenStorage("");
   }, []);
 
   const ContextValue: IAuthContext = useMemo(() => {
     return {
-      email,
-      token,
+      email: emailStorage,
+      token: tokenStorage,
       updateEmail,
       updateToken,
+      logout,
     };
-  }, [email, token, updateEmail, updateToken]);
+  }, [updateEmail, updateToken, tokenStorage]);
 
   return (
     <AuthContext.Provider value={ContextValue}>{children}</AuthContext.Provider>

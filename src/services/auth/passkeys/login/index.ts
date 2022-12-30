@@ -2,8 +2,8 @@ import {
   AuthenticationCredentialJSON,
   PublicKeyCredentialCreationOptionsJSON,
 } from "@simplewebauthn/typescript-types";
-import axios from "axios";
-import { IToken } from "../../../../types";
+import { IToken } from "types";
+import Api from "services/api";
 
 export interface IVerifyPasskeyLoginResponse {
   email: string;
@@ -12,8 +12,8 @@ export interface IVerifyPasskeyLoginResponse {
 }
 
 export const getPasskeyLoginOptions = (token: string, email: string) => {
-  return axios.post<PublicKeyCredentialCreationOptionsJSON>(
-    "http://localhost:3000/auth/passkeys/login/options",
+  return Api.post<PublicKeyCredentialCreationOptionsJSON>(
+    "passkeys/login/options",
     {
       email,
     },
@@ -32,8 +32,8 @@ export const verifyPasskeyLoginOptions = ({
   email: string;
   credential: AuthenticationCredentialJSON;
 }) => {
-  return axios.post<IVerifyPasskeyLoginResponse>(
-    "http://localhost:3000/auth/passkeys/login",
+  return Api.post<IVerifyPasskeyLoginResponse>(
+    "passkeys/login",
     { email, credential },
     {
       headers: { Authorization: `Bearer ${token}` },

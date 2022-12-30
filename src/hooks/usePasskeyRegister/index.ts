@@ -1,11 +1,11 @@
 import { startRegistration } from "@simplewebauthn/browser";
 import { RegistrationCredentialJSON } from "@simplewebauthn/typescript-types";
+import useAuth from "hooks/useAuth";
 import { useCallback, useState } from "react";
 import {
   getPasskeyRegisterationOptions,
   verifyPasskeyRegisterationOptions,
-} from "../../services/auth/passkeys/register";
-import useAuth from "../useAuth";
+} from "services/auth/passkeys/register";
 
 const usePasskeyRegister = () => {
   const { token } = useAuth();

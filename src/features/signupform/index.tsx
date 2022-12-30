@@ -2,13 +2,13 @@ import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import FormButton from "../../components/Form/Button";
-import ButtonContainer from "../../components/Form/ButtonContainer";
-import FormHeader from "../../components/Form/Header";
-import FormInput from "../../components/Form/Input";
-import InputContainer from "../../components/Form/InputContainer";
-import FormLabel from "../../components/Form/Label";
-import useSignup from "../../hooks/useSingup";
+import FormButton from "components/Form/Button";
+import ButtonContainer from "components/Form/ButtonContainer";
+import FormHeader from "components/Form/Header";
+import FormInput from "components/Form/Input";
+import InputContainer from "components/Form/InputContainer";
+import FormLabel from "components/Form/Label";
+import useSignup from "hooks/useSingup";
 
 const SignupFormContainer = styled.div`
   max-width: 500px;

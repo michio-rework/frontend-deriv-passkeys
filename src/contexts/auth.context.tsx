@@ -5,6 +5,7 @@ export interface IAuthContext {
   token: string;
   updateEmail: (newEmail: string) => void;
   updateToken: (newToken: string) => void;
+  logout: () => void;
 }
 
 const ContextInitialValue: IAuthContext = {
