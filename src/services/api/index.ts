@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const base = import.meta.env.SERVER_BASE_URL;
+const base =
+  import.meta.env.SERVER_BASE_URL ?? "http://test-passkeys.regentmarkets.com/";
 
 const Api = axios.create({
   baseURL: base,
