@@ -1,20 +1,14 @@
-import { useEffect } from "react";
-import useUser from "hooks/useUser";
+import useUser from 'hooks/useUser';
 
 const UserView = () => {
-  const { userInfo, getUserInfo } = useUser();
-  useEffect(() => {
-    getUserInfo();
-  }, [getUserInfo]);
-  console.log(userInfo);
+  const { userInfo } = useUser();
 
   return (
     <div>
       {userInfo?.authenticators?.map((item) => {
         return (
           <div key={item.id}>
-            {item.id}, {item.credentialDeviceType}, {item.counter},{" "}
-            {item.credentialID}, {item.credentialPublicKey}
+            {item.id}, {item.credentialDeviceType}, {item.counter}, {item.credentialID}, {item.credentialPublicKey}
           </div>
         );
       })}

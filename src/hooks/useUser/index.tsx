@@ -1,18 +1,19 @@
-import useAuth from "hooks/useAuth";
-import { useCallback, useState } from "react";
-import getUser, { IGetUserResponse } from "services/user";
+import useAxios from 'axios-hooks';
+import { API_USER_ME, IGetUserResponse } from 'services/user';
 
 const useUser = () => {
-  const { token } = useAuth();
-  const [userInfo, setUserInfo] = useState<IGetUserResponse>();
+  const [{ data, loading, error }, getMe, cancelGetMe] = useAxios<IGetUserResponse, unknown>(
+    {
+      url: API_USER_ME,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    },
+    { autoCancel: true, manual: false },
+  );
 
-  const getUserInfo = useCallback(async () => {
-    const user = await getUser(token);
-
-    setUserInfo(user.data);
-  }, [token]);
-
-  return { userInfo, getUserInfo };
+  return { userInfo: data };
 };
 
 export default useUser;

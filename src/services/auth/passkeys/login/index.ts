@@ -1,9 +1,6 @@
-import {
-  AuthenticationCredentialJSON,
-  PublicKeyCredentialCreationOptionsJSON,
-} from "@simplewebauthn/typescript-types";
-import { IToken } from "types";
-import Api from "services/api";
+import { AuthenticationCredentialJSON, PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/typescript-types';
+import { IToken } from 'types';
+import Api from 'services/api';
 
 export interface IVerifyPasskeyLoginResponse {
   email: string;
@@ -11,32 +8,14 @@ export interface IVerifyPasskeyLoginResponse {
   verified: boolean;
 }
 
-export const getPasskeyLoginOptions = (token: string, email: string) => {
-  return Api.post<PublicKeyCredentialCreationOptionsJSON>(
-    "passkeys/login/options",
-    {
-      email,
-    },
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-};
+export interface IGetPasskeyLoginOptionsRequest {
+  email: string;
+}
 
-export const verifyPasskeyLoginOptions = ({
-  token,
-  credential,
-  email,
-}: {
-  token: string;
+export interface IVerifyPasskeyLoginOptionsRequest {
   email: string;
   credential: AuthenticationCredentialJSON;
-}) => {
-  return Api.post<IVerifyPasskeyLoginResponse>(
-    "passkeys/login",
-    { email, credential },
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-};
+}
+
+export const API_LOGIN_PASSKEY_OPTIONS = 'passkeys/login/options';
+export const API_LOGIN_PASSKEY = 'passkeys/login';

@@ -1,17 +1,16 @@
-import { useCallback } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { ILoginRequest } from "services/auth/default/login";
-import styled from "styled-components";
-import FormButton from "components/Form/Button";
-import ButtonContainer from "components/Form/ButtonContainer";
-import FormHeader from "components/Form/Header";
-import FormInput from "components/Form/Input";
-import InputContainer from "components/Form/InputContainer";
-import FormLabel from "components/Form/Label";
-import useLogin from "hooks/useLogin";
-import usePasskeyLogin from "hooks/usePasskeyLogin";
-import useWebAuthn from "hooks/useWebAuthn";
+import { useCallback } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { ILoginRequest } from 'services/auth/default/login';
+import styled from 'styled-components';
+import FormButton from 'components/Form/Button';
+import ButtonContainer from 'components/Form/ButtonContainer';
+import FormHeader from 'components/Form/Header';
+import FormInput from 'components/Form/Input';
+import InputContainer from 'components/Form/InputContainer';
+import FormLabel from 'components/Form/Label';
+import useLogin from 'hooks/useLogin';
+import usePasskeyLogin from 'hooks/usePasskeyLogin';
 
 const LoginFormContainer = styled.div`
   max-width: 500px;
@@ -32,9 +31,7 @@ interface ILoginFormInputs {
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const login = useLogin();
-
-  const { hasWebAuthnAutofill, hasWebAuthnSupport } = useWebAuthn();
+  const { onLogin, loading, error } = useLogin();
 
   const {
     register,
@@ -50,12 +47,12 @@ const LoginForm = () => {
     const { email } = getValues();
     if (!email) {
       setError(
-        "email",
+        'email',
         {
-          message: "This field is required for login with Passkey",
-          type: "required",
+          message: 'This field is required for login with Passkey',
+          type: 'required',
         },
-        { shouldFocus: true }
+        { shouldFocus: true },
       );
     } else {
       loginPasskey(email);
@@ -63,17 +60,16 @@ const LoginForm = () => {
   };
 
   const onSubmit: SubmitHandler<ILoginRequest> = (data) => {
-    login(data);
+    onLogin(data);
   };
 
-  const onNavigateToSignUp: React.MouseEventHandler<HTMLButtonElement> =
-    useCallback(
-      (e) => {
-        e.preventDefault();
-        navigate("/signup");
-      },
-      [navigate]
-    );
+  const onNavigateToSignUp: React.MouseEventHandler<HTMLButtonElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      navigate('/signup');
+    },
+    [navigate],
+  );
 
   return (
     <LoginFormContainer>
@@ -87,7 +83,7 @@ const LoginForm = () => {
             type="email"
             autoComplete="webauthn"
             defaultValue="michio@michio.com"
-            {...register("email", {
+            {...register('email', {
               required: true,
               pattern: /^\S+@\S+\.\S+$/,
             })}
@@ -100,7 +96,7 @@ const LoginForm = () => {
             placeholder="Enter your password"
             type="password"
             defaultValue="michio"
-            {...register("password", { required: true })}
+            {...register('password', { required: true })}
           />
           {errors.email && <span>This field is required</span>}
         </InputContainer>

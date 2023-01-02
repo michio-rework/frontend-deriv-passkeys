@@ -1,34 +1,58 @@
-import { startRegistration } from "@simplewebauthn/browser";
-import { RegistrationCredentialJSON } from "@simplewebauthn/typescript-types";
-import useAuth from "hooks/useAuth";
-import { useCallback, useState } from "react";
+import { startRegistration } from '@simplewebauthn/browser';
+import { PublicKeyCredentialCreationOptionsJSON, RegistrationCredentialJSON } from '@simplewebauthn/typescript-types';
+import useAxios from 'axios-hooks';
+import { useCallback, useEffect, useState } from 'react';
 import {
-  getPasskeyRegisterationOptions,
-  verifyPasskeyRegisterationOptions,
-} from "services/auth/passkeys/register";
+  API_PASSKEY_REGISTER,
+  API_PASSKEY_REGISTER_OPTIONS,
+  IVerificationResponse,
+} from 'services/auth/passkeys/register';
 
 const usePasskeyRegister = () => {
-  const { token } = useAuth();
   const [registerVerified, setRegisterVerified] = useState<boolean>(false);
 
+  const [passkeyRegisterOptions, getPasskeyOptions, cancelGetPasskeyOptions] =
+    useAxios<PublicKeyCredentialCreationOptionsJSON>(
+      {
+        url: API_PASSKEY_REGISTER_OPTIONS,
+        method: 'get',
+      },
+      { manual: true },
+    );
+
+  const [passkeyLoginVerification, verifyLogin, cancelVerifyLogin] = useAxios<
+    IVerificationResponse,
+    RegistrationCredentialJSON
+  >(
+    {
+      url: API_PASSKEY_REGISTER,
+      method: 'post',
+    },
+    { manual: true },
+  );
+
   const registerPasskey = useCallback(async () => {
-    // Get registeration options from server
-    const userRegisterationOptions = await getPasskeyRegisterationOptions(
-      token
-    );
+    try {
+      await getPasskeyOptions();
+      if (passkeyRegisterOptions.data) {
+        const userRegistrationResult: RegistrationCredentialJSON = await startRegistration(passkeyRegisterOptions.data);
+        await verifyLogin({ data: userRegistrationResult });
+      }
+    } catch (error) {
+      console.error('Something went wrong: ', error);
+    }
+  }, [getPasskeyOptions, passkeyRegisterOptions.data, verifyLogin]);
 
-    // Get User's Credentials
-    const userRegistrationResult: RegistrationCredentialJSON =
-      await startRegistration(userRegisterationOptions.data);
+  useEffect(() => {
+    if (passkeyLoginVerification.data?.verified) {
+      setRegisterVerified(passkeyLoginVerification.data.verified);
+    }
 
-    // Get Server's Verification
-    const serverVerificationResult = await verifyPasskeyRegisterationOptions(
-      token,
-      userRegistrationResult
-    );
-
-    setRegisterVerified(serverVerificationResult.data.verified);
-  }, [token]);
+    return () => {
+      cancelGetPasskeyOptions();
+      cancelVerifyLogin();
+    };
+  }, [cancelGetPasskeyOptions, cancelVerifyLogin, passkeyLoginVerification?.data?.verified]);
 
   return { registerVerified, registerPasskey };
 };

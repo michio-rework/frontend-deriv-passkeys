@@ -1,26 +1,38 @@
-import { ReactNode, useCallback, useMemo, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
-import AuthContext, { IAuthContext } from "contexts/auth.context";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import AuthContext, { IAuthContext } from 'contexts/auth.context';
 
 interface IAuthProvider {
   children: ReactNode;
 }
 
 const AuthProvider = ({ children }: IAuthProvider) => {
-  const [tokenStorage, setTokenStorage] = useLocalStorage<string>("token", "");
-  const [emailStorage, setEmailStorage] = useLocalStorage<string>("email", "");
+  const [tokenStorage, setTokenStorage] = useState<string>('');
+  const [emailStorage, setEmailStorage] = useState<string>('');
 
-  const updateEmail = useCallback((updatedEmail: string) => {
-    setEmailStorage(updatedEmail);
-  }, []);
+  const updateEmail = useCallback(
+    (updatedEmail: string) => {
+      localStorage.setItem('email', updatedEmail);
+      setEmailStorage(updatedEmail);
+    },
+    [setEmailStorage],
+  );
 
-  const updateToken = useCallback((updatedToken: string) => {
-    setTokenStorage(updatedToken);
-  }, []);
+  const updateToken = useCallback(
+    (updatedToken: string) => {
+      localStorage.setItem('token', updatedToken);
+      setTokenStorage(updatedToken);
+    },
+    [setTokenStorage],
+  );
 
   const logout = useCallback(() => {
-    setEmailStorage("");
-    setTokenStorage("");
+    setEmailStorage('');
+    setTokenStorage('');
+  }, [setEmailStorage, setTokenStorage]);
+
+  useEffect(() => {
+    setTokenStorage(localStorage.getItem('token') ?? '');
+    setEmailStorage(localStorage.getItem('email') ?? '');
   }, []);
 
   const ContextValue: IAuthContext = useMemo(() => {
@@ -31,11 +43,9 @@ const AuthProvider = ({ children }: IAuthProvider) => {
       updateToken,
       logout,
     };
-  }, [updateEmail, updateToken, tokenStorage]);
+  }, [emailStorage, logout, tokenStorage, updateEmail, updateToken]);
 
-  return (
-    <AuthContext.Provider value={ContextValue}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={ContextValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

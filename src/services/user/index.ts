@@ -1,4 +1,4 @@
-import Api from "services/api";
+export const API_USER_ME = 'users/me';
 
 export interface IAuthenticator {
   id: number;
@@ -13,11 +13,3 @@ export interface IGetUserResponse {
   email: string;
   authenticators?: IAuthenticator[];
 }
-
-const getUser = (token: string) => {
-  return Api.get<IGetUserResponse>("users/me", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-};
-
-export default getUser;
