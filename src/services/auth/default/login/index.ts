@@ -12,7 +12,7 @@ export interface ILoginResponse {
 }
 
 const login = ({ email, password }: ILoginRequest) => {
-  return Api.post<ILoginResponse>("auth/login", {
+  return Api.post<ILoginResponse>("auth/login/", {
     email,
     password,
   });
